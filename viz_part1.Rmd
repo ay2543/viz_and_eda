@@ -1,0 +1,62 @@
+---
+title: "viz_part1"
+output: github_document
+date: "2022-09-29"
+---
+
+```{r, message=F}
+library(tidyverse)
+library(ggridges)
+```
+
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+Let's make a scatterplot
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+
+Let's make the same scatterplot but different
+
+```{r}
+weather_scatterplot = weather_df %>% 
+  drop_na() %>% 
+  filter(name == "CentralPark_NY") %>% 
+  ggplot(aes(x = tmin, y = tmax)) 
+
+weather_scatterplot + 
+  geom_point()
+```
+
+
+
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name)) +
+  geom_smooth(aes(color = name)) # need to put aes(color) to make 3 lines instead of a general one
+```
+
+
+
+
+
+
