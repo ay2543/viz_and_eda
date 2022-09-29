@@ -27,6 +27,7 @@ weather_df =
   select(name, id, everything())
 ```
 
+## Scatterplots
 Let's make a scatterplot
 ```{r}
 ggplot(weather_df, aes(x = tmin, y = tmax)) + 
@@ -70,5 +71,61 @@ weather_df %>%
   ggplot(aes(x = tmin, y = tmax)) +
   geom_hex() # see the number of data points in each area of the plot, good for large datasets
 ```
+
+
+## Univariate plots
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x=tmax, fill = name)) + # not color as it is related to the border
+  geom_histogram() +
+  facet_grid(.~name)
+```
+
+Let's see more options
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x=tmax, fill = name)) + 
+  geom_density(alpha = 0.3)
+```
+
+Onto boxplots
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x=name, y=tmax, fill=name)) + 
+  geom_boxplot()
+```
+
+Violin plots give the distribution and the attributes given from a boxplot. Useful if comparing 30 things 
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x=name, y=tmax, fill=name)) + 
+  geom_violin()
+```
+OR
+Create each density and stacks them up next to each other - close enough for direct comparison, better than overlapping density plots for 30 things.
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, y = name)) +
+  geom_density_ridges()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
