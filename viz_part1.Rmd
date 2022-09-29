@@ -114,6 +114,23 @@ weather_df %>%
 ```
 
 
+## Saving and embedding plots
+
+First, let's save a plot
+
+```{r}
+weather_scatterplot = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = 0.3) +
+  geom_smooth(se = F) +
+  facet_grid(.~name)
+
+weather_scatterplot
+
+ggsave("./results/weather_scatterplot.pdf",weather_scatterplot, width = 8, height = 5)
+  
+```
 
 
 
