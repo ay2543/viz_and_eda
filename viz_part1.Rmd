@@ -51,12 +51,24 @@ weather_scatterplot +
 
 ```{r}
 ggplot(weather_df, aes(x = tmin, y = tmax)) + 
-  geom_point(aes(color = name)) +
-  geom_smooth(aes(color = name)) # need to put aes(color) to make 3 lines instead of a general one
+  geom_point(aes(color = name), alpha = 0.3) +
+  geom_smooth(aes(color = name), se = F) + # need to put aes(color) here too, se=F removes error bar 
+  facet_grid(.~name) # row ~ column stratifier
 ```
 
 
+```{r}
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point(aes(size = prcp), alpha = 0.3) +
+  geom_smooth( se = F) + # need to put aes(color) here too, se=F removes error bar 
+  facet_grid(.~name) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))# row ~ column stratifier
+```
 
-
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_hex() # see the number of data points in each area of the plot, good for large datasets
+```
 
 
