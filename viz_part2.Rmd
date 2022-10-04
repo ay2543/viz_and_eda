@@ -1,0 +1,90 @@
+---
+title: "viz_part2"
+output: github_document
+date: "2022-09-29"
+---
+
+```{r, message=F}
+library(tidyverse)
+library(ggridges)
+```
+
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+
+## Scatterplot
+
+But better this time
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) + 
+  labs(
+    x = "Minimum Daily Temp (C)",
+    y = "Maximum Daily Temp (C)",
+    title = "Scatterplot of daily temp extremes",
+    caption = "Data come from the rnoaa package"
+  ) +
+  scale_x_continuous(
+    breaks = c(-10, 0, 15),
+    labels = c("-10C", "0", "15")
+  ) # + scale_y_continuous(trans = "sqrt") to transform scale of data
+```
+
+Make a new version
+
+```{r}
+ggp_weather = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) + 
+  labs(
+    x = "Minimum Daily Temp (C)",
+    y = "Maximum Daily Temp (C)",
+    title = "Scatterplot of daily temp extremes",
+    caption = "Data come from the rnoaa package"
+  ) +
+  scale_color_hue(
+    name = "Location",
+    h = c(100, 300)) +
+  viridis::scale_color_viridis(name = "Location", discrete = T)
+```
+
+
+```{r}
+ggp_weather +
+  theme(legend.position = "bottom") +
+  theme_classic()
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
